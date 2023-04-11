@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/6cede6a412794fa8888688ae1f647f8a/artifacts
+end_time: 1681149789137
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6cede6a412794fa8888688ae1f647f8a
+run_name: secretive-moth-105
+run_uuid: 6cede6a412794fa8888688ae1f647f8a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1681149014608
+status: 3
+tags: []
+user_id: elmer

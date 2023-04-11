@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/4acf914159f344d9a2b21c72aeb894a0/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4acf914159f344d9a2b21c72aeb894a0
+run_name: traveling-colt-136
+run_uuid: 4acf914159f344d9a2b21c72aeb894a0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1679772007302
+status: 1
+tags: []
+user_id: elmer

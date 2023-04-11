@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/e0f8a6cc388a49bb8897b6546f8a7b72/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e0f8a6cc388a49bb8897b6546f8a7b72
+run_name: melodic-kite-528
+run_uuid: e0f8a6cc388a49bb8897b6546f8a7b72
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1679773395265
+status: 1
+tags: []
+user_id: elmer

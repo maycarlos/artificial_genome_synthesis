@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/822a888a78364128b3e8a94bead8f06d/artifacts
+end_time: 1677440528034
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 822a888a78364128b3e8a94bead8f06d
+run_name: silent-fly-552
+run_uuid: 822a888a78364128b3e8a94bead8f06d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1677439504064
+status: 3
+tags: []
+user_id: elmer

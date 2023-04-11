@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/98584ca9f26b42e9892644f78892f992/artifacts
+end_time: 1678464116399
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 98584ca9f26b42e9892644f78892f992
+run_name: fun-hound-855
+run_uuid: 98584ca9f26b42e9892644f78892f992
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678458440422
+status: 3
+tags: []
+user_id: elmer

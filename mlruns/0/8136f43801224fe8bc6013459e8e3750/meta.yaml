@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/8136f43801224fe8bc6013459e8e3750/artifacts
+end_time: 1677444480353
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8136f43801224fe8bc6013459e8e3750
+run_name: marvelous-sponge-542
+run_uuid: 8136f43801224fe8bc6013459e8e3750
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1677443361208
+status: 3
+tags: []
+user_id: elmer

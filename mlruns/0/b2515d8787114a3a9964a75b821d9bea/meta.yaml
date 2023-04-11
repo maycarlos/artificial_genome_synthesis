@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/b2515d8787114a3a9964a75b821d9bea/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b2515d8787114a3a9964a75b821d9bea
+run_name: gifted-boar-825
+run_uuid: b2515d8787114a3a9964a75b821d9bea
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1679771943729
+status: 1
+tags: []
+user_id: elmer

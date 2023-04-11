@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/6ae3fdd7fb8841259bd873fb0d6d6f86/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6ae3fdd7fb8841259bd873fb0d6d6f86
+run_name: secretive-quail-403
+run_uuid: 6ae3fdd7fb8841259bd873fb0d6d6f86
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678464122076
+status: 1
+tags: []
+user_id: elmer

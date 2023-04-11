@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/e64205a49ec148a39c121d18de3c19b4/artifacts
+end_time: 1677443059188
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e64205a49ec148a39c121d18de3c19b4
+run_name: sedate-bat-978
+run_uuid: e64205a49ec148a39c121d18de3c19b4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1677442102612
+status: 3
+tags: []
+user_id: elmer

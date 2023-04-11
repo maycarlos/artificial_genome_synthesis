@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/f8eafe062c1f41798608bb5ca7bac0e4/artifacts
+end_time: 1681139935711
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f8eafe062c1f41798608bb5ca7bac0e4
+run_name: gifted-asp-989
+run_uuid: f8eafe062c1f41798608bb5ca7bac0e4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1681139635031
+status: 3
+tags: []
+user_id: elmer

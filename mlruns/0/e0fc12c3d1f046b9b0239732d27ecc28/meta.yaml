@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/e0fc12c3d1f046b9b0239732d27ecc28/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e0fc12c3d1f046b9b0239732d27ecc28
+run_name: fun-quail-398
+run_uuid: e0fc12c3d1f046b9b0239732d27ecc28
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1679757422939
+status: 1
+tags: []
+user_id: elmer

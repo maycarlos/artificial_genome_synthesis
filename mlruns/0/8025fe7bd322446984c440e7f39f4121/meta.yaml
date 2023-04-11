@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/8025fe7bd322446984c440e7f39f4121/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8025fe7bd322446984c440e7f39f4121
+run_name: abundant-worm-953
+run_uuid: 8025fe7bd322446984c440e7f39f4121
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1681135085840
+status: 1
+tags: []
+user_id: elmer

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/1be40f75d5e24b40a7455612a8dd7ed3/artifacts
+end_time: 1678320157060
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 1be40f75d5e24b40a7455612a8dd7ed3
+run_name: victorious-shrew-644
+run_uuid: 1be40f75d5e24b40a7455612a8dd7ed3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678319711336
+status: 4
+tags: []
+user_id: elmer

@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/7a1632e6f87d409b8d53640744a10e51/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7a1632e6f87d409b8d53640744a10e51
+run_name: rogue-fawn-574
+run_uuid: 7a1632e6f87d409b8d53640744a10e51
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1679772686248
+status: 1
+tags: []
+user_id: elmer

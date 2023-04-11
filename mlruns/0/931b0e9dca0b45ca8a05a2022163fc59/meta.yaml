@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/931b0e9dca0b45ca8a05a2022163fc59/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 931b0e9dca0b45ca8a05a2022163fc59
+run_name: judicious-whale-480
+run_uuid: 931b0e9dca0b45ca8a05a2022163fc59
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678335297831
+status: 1
+tags: []
+user_id: elmer

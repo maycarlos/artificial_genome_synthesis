@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/8a5c90ca6c01488faf2582a213ce61da/artifacts
+end_time: 1678319645982
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8a5c90ca6c01488faf2582a213ce61da
+run_name: rumbling-midge-743
+run_uuid: 8a5c90ca6c01488faf2582a213ce61da
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1678313215851
+status: 4
+tags: []
+user_id: elmer

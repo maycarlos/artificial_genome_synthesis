@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/ec068559886e4189abbf161f1b5fa8ab/artifacts
+end_time: 1679330625932
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ec068559886e4189abbf161f1b5fa8ab
+run_name: silent-foal-668
+run_uuid: ec068559886e4189abbf161f1b5fa8ab
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1679330178273
+status: 4
+tags: []
+user_id: elmer

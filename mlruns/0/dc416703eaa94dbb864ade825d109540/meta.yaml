@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/dc416703eaa94dbb864ade825d109540/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: dc416703eaa94dbb864ade825d109540
+run_name: spiffy-bee-294
+run_uuid: dc416703eaa94dbb864ade825d109540
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1681134844589
+status: 1
+tags: []
+user_id: elmer

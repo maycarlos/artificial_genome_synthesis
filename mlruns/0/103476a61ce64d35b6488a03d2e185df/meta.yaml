@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/103476a61ce64d35b6488a03d2e185df/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 103476a61ce64d35b6488a03d2e185df
+run_name: learned-turtle-733
+run_uuid: 103476a61ce64d35b6488a03d2e185df
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1681132849092
+status: 1
+tags: []
+user_id: elmer

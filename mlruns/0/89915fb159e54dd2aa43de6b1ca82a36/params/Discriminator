@@ -1,0 +1,12 @@
+OptimizedModule(
+  (_orig_mod): Discriminator(
+    (discriminate): Sequential(
+      (0): Linear(in_features=7500, out_features=3750, bias=True)
+      (1): LeakyReLU(negative_slope=0.01)
+      (2): Linear(in_features=3750, out_features=2500, bias=True)
+      (3): LeakyReLU(negative_slope=0.01)
+      (4): Linear(in_features=2500, out_features=1, bias=True)
+      (5): Sigmoid()
+    )
+  )
+)

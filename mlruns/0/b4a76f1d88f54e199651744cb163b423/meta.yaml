@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/b4a76f1d88f54e199651744cb163b423/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: b4a76f1d88f54e199651744cb163b423
+run_name: hilarious-loon-191
+run_uuid: b4a76f1d88f54e199651744cb163b423
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1681150489616
+status: 1
+tags: []
+user_id: elmer

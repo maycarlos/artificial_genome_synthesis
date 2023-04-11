@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/478bea70b42743589041bf73d57befed/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 478bea70b42743589041bf73d57befed
+run_name: righteous-croc-702
+run_uuid: 478bea70b42743589041bf73d57befed
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1679758556472
+status: 1
+tags: []
+user_id: elmer

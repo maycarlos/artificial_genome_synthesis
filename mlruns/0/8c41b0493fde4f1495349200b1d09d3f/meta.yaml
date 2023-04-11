@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/8c41b0493fde4f1495349200b1d09d3f/artifacts
+end_time: 1677439389220
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8c41b0493fde4f1495349200b1d09d3f
+run_name: masked-cod-991
+run_uuid: 8c41b0493fde4f1495349200b1d09d3f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1677438380831
+status: 3
+tags: []
+user_id: elmer

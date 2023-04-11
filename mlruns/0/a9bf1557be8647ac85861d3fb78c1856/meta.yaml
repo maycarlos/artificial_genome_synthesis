@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/a9bf1557be8647ac85861d3fb78c1856/artifacts
+end_time: 1677436423367
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a9bf1557be8647ac85861d3fb78c1856
+run_name: bedecked-stag-360
+run_uuid: a9bf1557be8647ac85861d3fb78c1856
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1677435500369
+status: 4
+tags: []
+user_id: elmer
