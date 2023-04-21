@@ -9,6 +9,8 @@ BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
 PROJECT_NAME = artificial_genome_synthesis
 PYTHON_INTERPRETER = python3
+PIP_EXECUTABLE = pip
+CONDA_ENV = "deep_learn"
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -45,10 +47,17 @@ clean:
 	find . -type d -name "__pycache__" -delete
 	find . -type d -name ".mypy_cache/" -delete
 	
+## install the current package 
+install:
+	$(PIP_EXECUTABLE) install .
+
+tracking:
+	clear
+	mlflow ui 
 
 ## Lint using black
 lint:
-	black src
+	black artificial_genome_synthesis
 
 ## Upload Data to S3
 sync_data_to_s3:
@@ -88,7 +97,6 @@ endif
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
-
 
 
 #################################################################################

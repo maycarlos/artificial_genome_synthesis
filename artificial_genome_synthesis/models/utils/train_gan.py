@@ -33,6 +33,7 @@ class GANTrainerSetup(BaseTrainerSetup):
         self.g_optimizer = g_optimizer
         self.d_optimizer = d_optimizer
         self.loss_function = loss_function
+        self.latent_size = latent_size
         self.n_ags = n_ags
         self.original_data = original_data
         self.labels = labels
@@ -42,7 +43,7 @@ class GANTrainerSetup(BaseTrainerSetup):
 
         trainer = Engine(self.train_step)
 
-        umap_obj, umap_real = init_umap(original_data, labels)
+        umap_obj, umap_real = init_umap(self.original_data, self.labels)
 
         r_bar = "| {n_fmt}/{total_fmt} [{postfix}]"
 
@@ -124,7 +125,7 @@ class GANTrainerSetup(BaseTrainerSetup):
         self.discriminator.zero_grad()
         disc_loss.backward(retain_graph=True)
         clip_grad_norm_(self.discriminator.parameters(), 1)
-        d_optimizer.step()
+        self.d_optimizer.step()
 
         # * Train Generator
         output = self.discriminator(X_fake).view(-1)
@@ -133,7 +134,7 @@ class GANTrainerSetup(BaseTrainerSetup):
         self.generator.zero_grad()
         gen_loss.backward()
         clip_grad_norm_(self.generator.parameters(), 1)
-        g_optimizer.step()
+        self.g_optimizer.step()
 
         metrics = {"Discriminator Loss": disc_loss, "Generator Loss": gen_loss}
 

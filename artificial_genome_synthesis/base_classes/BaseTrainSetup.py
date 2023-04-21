@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from ...utils.types_ import (DataFrame, Dataloader, Device, LossFunction,
-                             Model, Optimizer)
+from ...utils.types_ import DataFrame, Device, LossFunction, Model, Optimizer
 
 
 class BaseTrainerSetup(metaclass=ABCMeta):
