@@ -5,6 +5,15 @@ import pandas as pd
 import torch
 from torch.types import Device
 from torch.utils.data import DataLoader
+from enum import Enum
+
+
+class SelectWGAN(Enum):
+    GP = "GP"
+    CP = "CP"
+    NAIVE = "NAIVE"
+    CUSTOM = "CUSTOM"
+
 
 DataFrame = TypeVar("DataFrame", pd.DataFrame, Any)
 Tensor = TypeVar("Tensor", torch.Tensor, Any)
@@ -14,8 +23,8 @@ Dataloader = TypeVar("Dataloader", DataLoader, Any)
 Optimizer = TypeVar("Optimizer", torch.optim.Optimizer, Any)
 LossFunction = TypeVar("LossFunction", Callable, Any)
 
-
 __all__ = [
+    "SelectWGAN",
     "DataFrame",
     "Tensor",
     "Array",

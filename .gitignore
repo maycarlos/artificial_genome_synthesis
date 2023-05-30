@@ -1,5 +1,8 @@
-
+mlruns/
 data/
+docs/
+notebooks/
+references/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

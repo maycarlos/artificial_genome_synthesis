@@ -8,15 +8,14 @@ class Generator(nn.Module):
         super().__init__()
 
         self.generate = nn.Sequential(
-            nn.Linear(in_features=latent_size,
-                      out_features=int(features // 1.2)),
-            nn.LeakyReLU(negative_slope=alpha),
+            nn.Linear(in_features=latent_size, out_features=int(features // 1.2)),
+            nn.LeakyReLU(negative_slope=alpha, inplace=True),
             # nn.GELU(),
             nn.Linear(
                 in_features=int(features // 1.2),
                 out_features=int(features // 1.1),
             ),
-            nn.LeakyReLU(negative_slope=alpha),
+            nn.LeakyReLU(negative_slope=alpha, inplace=True),
             # nn.GELU(),
             nn.Linear(in_features=int(features // 1.1), out_features=features),
             nn.Tanh(),
@@ -38,13 +37,13 @@ class Discriminator(nn.Module):
 
         self.discriminate = nn.Sequential(
             nn.Linear(in_features=features, out_features=int(features // 2)),
-            nn.LeakyReLU(negative_slope=alpha),
+            nn.LeakyReLU(negative_slope=alpha, inplace=True),
             # nn.GELU(),
             nn.Linear(
                 in_features=int(features // 2),
                 out_features=int(features // 3),
             ),
-            nn.LeakyReLU(negative_slope=alpha),
+            nn.LeakyReLU(negative_slope=alpha, inplace=True),
             # nn.GELU(),
             nn.Linear(in_features=int(features // 3), out_features=1),
             nn.Sigmoid(),

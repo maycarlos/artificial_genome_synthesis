@@ -11,21 +11,16 @@ from sklearn.decomposition import PCA
 from umap import UMAP
 
 from ..utils.load_env import ENV_CONFIG
-from ..utils.types_ import DataFrame, Device, Model, Array
+from ..utils.types_ import DataFrame, Device, Model, Array, Tensor
 from sklearn.utils.validation import check_is_fitted
 
 init(autoreset=True)
 
+RUN_TIME = ENV_CONFIG["RUN_TIME"]
 plt.rcParams["figure.figsize"] = (12, 10)
 plt.style.use("fivethirtyeight")
 plt.switch_backend("agg")
 
-
-RUN_TIME = int(time.time())
-
-
-print("Experiment nº ", end="")
-print(Fore.GREEN + f"{RUN_TIME}" + Fore.RESET)
 
 default_figure_folder = Path(ENV_CONFIG["FIGURES_FOLDER"])
 default_gendata_folder = Path(ENV_CONFIG["GENERATED_DATA_FOLDER"])
@@ -38,15 +33,18 @@ def create_artificial(
     epoch: int,
     title: str,
     device: Device,
+    noise: Optional[Tensor] = None,
     save_data: bool = True,
     save_location: Path = default_gendata_folder,
 ) -> DataFrame:
     # Create AGs from the trained model
 
-    with torch.no_grad():
+    if noise is None:
+        noise = torch.randn(n_ags, latent_size)
+    noise = noise.cuda()
 
-        latent_noise = torch.randn(n_ags, latent_size, device=device)
-        artificial_data = generator.generation(latent_noise)
+    with torch.no_grad():
+        artificial_data = generator.generation(noise)
 
         artificial_data = artificial_data.cpu()
 
@@ -133,7 +131,6 @@ def plot_pca(
     save_fig: Optional[bool] = True,
     save_location: Optional[Path] = default_figure_folder,
 ):
-
     # prepare the pca dataframe for the real and the artificial genome
     # real_pca = real_data.drop(real_data.columns[:2], axis=1)
     real_pca: DataFrame = real_data.copy()
@@ -189,11 +186,9 @@ def plot_losses(
     save_fig: bool = True,
     save_location: Path = default_figure_folder,
 ):
-
     fig, ax = plt.subplots(1, 2)
 
-    ax[0].plot(discriminator_losses, linewidth=2,
-               c="orange", label="Discriminator")
+    ax[0].plot(discriminator_losses, linewidth=2, c="orange", label="Discriminator")
 
     ax[0].set_title("Discriminator Loss Evolution")
 
@@ -221,7 +216,6 @@ def plot_hierachical_cluster():
 
 
 def init_umap(original_data: DataFrame, labels: DataFrame):
-
     print(Fore.GREEN + "Initializing UMAP" + Fore.RESET)
 
     umap_object = UMAP(

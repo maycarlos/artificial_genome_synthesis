@@ -1,5 +1,5 @@
 # TODO CVAE
-from ...base_classes import BaseModel
+from ...base import BaseModel
 import torch.nn
 
 
