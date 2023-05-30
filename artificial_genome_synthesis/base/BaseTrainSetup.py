@@ -33,4 +33,3 @@ class BaseTrainerSetup(metaclass=ABCMeta):
 
     def train_step(self, engine, batch):
         pass
-

@@ -2,6 +2,7 @@ from ignite.metrics import Metric
 import torch
 from typing import Callable, Union
 
+
 class Average(Metric):
     def __init__(
         self,
@@ -17,7 +18,7 @@ class Average(Metric):
 
     def reset(self) -> None:
         self._sum = torch.tensor(0.0).cuda()
-        self.n = 0  
+        self.n = 0
 
     def update(self, x):
         loss = self._loss_fn(x[0], x[1])

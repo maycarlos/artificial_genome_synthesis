@@ -66,11 +66,9 @@ class GANTrainerSetup(BaseTrainerSetup):
 
         events = Events.EPOCH_COMPLETED(once=1) | Events.EPOCH_COMPLETED(every=20)
 
-
         @trainer.on(events)
         def plot_losses(engine):
             pass
-
 
         @trainer.on(event_name=events)
         def generate_images(engine):
@@ -146,7 +144,10 @@ class GANTrainerSetup(BaseTrainerSetup):
         clip_grad_norm_(self.generator.parameters(), 1)
         self.g_optimizer.step()
 
-        metrics = {"Discriminator Loss": disc_loss.item(), "Generator Loss": gen_loss.item()}
+        metrics = {
+            "Discriminator Loss": disc_loss.item(),
+            "Generator Loss": gen_loss.item(),
+        }
 
         self.gen_losses.append(gen_loss.item())
         self.disc_losses.append(disc_loss.item())

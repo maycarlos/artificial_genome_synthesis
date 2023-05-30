@@ -27,13 +27,12 @@ from .metrics import Average
 init(autoreset=True)
 
 
-
 class WGANTrainerSetup(BaseTrainerSetup):
     def __init__(
         self,
         generator: Model,
         critic: Model,
-        wgan_type :Enum,
+        wgan_type: Enum,
         hyperparameters: object,
         val_dataloader: DataLoader,
         latent_size: int,
@@ -58,10 +57,12 @@ class WGANTrainerSetup(BaseTrainerSetup):
             self.__init_optimizer_gp(hyperparameters)
             self.__lambda_gp = lambda_gp
 
-        self.gen_losses : list = []
-        self.crit_losses : list = []
+        self.gen_losses: list = []
+        self.crit_losses: list = []
 
-        self.events = Events.EPOCH_COMPLETED(once=1) | Events.EPOCH_COMPLETED(every=self.save_interval)
+        self.events = Events.EPOCH_COMPLETED(once=1) | Events.EPOCH_COMPLETED(
+            every=self.save_interval
+        )
 
     def trainer_setup(self) -> tuple[Engine, Engine]:
         if self.wgan_type.value == "CP":
@@ -74,11 +75,10 @@ class WGANTrainerSetup(BaseTrainerSetup):
         def score_function(engine):
             val_loss = engine.state.metrics["Wasserstein Loss"]
             return np.abs(val_loss)
-        
+
         handler = EarlyStopping(
-            patience=5,
-            score_function=score_function,
-            trainer=trainer)
+            patience=5, score_function=score_function, trainer=trainer
+        )
 
         evaluator.add_event_handler(Events.COMPLETED, handler)
 
@@ -86,22 +86,25 @@ class WGANTrainerSetup(BaseTrainerSetup):
             return res["Critic Loss"], res["Generator Loss"]
 
         Average(
-            loss_fn=lambda x, y : x,
-            output_transform=transform_output, 
-            ).attach(trainer, "Average Critic Loss")
-        
-        Average(
-            loss_fn=lambda x,y: y,
+            loss_fn=lambda x, y: x,
             output_transform=transform_output,
-            ).attach(trainer, "Average Generator Loss")
+        ).attach(trainer, "Average Critic Loss")
 
         Average(
-            lambda x,y : x,
-            ).attach(evaluator, "Wasserstein Loss")
+            loss_fn=lambda x, y: y,
+            output_transform=transform_output,
+        ).attach(trainer, "Average Generator Loss")
+
+        Average(
+            lambda x, y: x,
+        ).attach(evaluator, "Wasserstein Loss")
 
         r_bar = "| {n_fmt}/{total_fmt} [{postfix}]"
 
-        ProgressBar(persist=True, bar_format="{l_bar}{bar}" + r_bar,).attach(
+        ProgressBar(
+            persist=True,
+            bar_format="{l_bar}{bar}" + r_bar,
+        ).attach(
             engine=trainer,
             metric_names=["Critic Loss", "Generator Loss"],
         )
@@ -110,22 +113,26 @@ class WGANTrainerSetup(BaseTrainerSetup):
         def start_message():
             print(Fore.GREEN + "Begin training!" + Fore.RESET)
 
-
         @trainer.on(self.events)
         def plot_losses(engine):
             fig, axs = plt.subplots(1, 2)
 
-            axs[0].plot(self.crit_losses, label = "Critic Loss", c = "blue")
-            axs[1].plot(self.gen_losses, label = "Generator Loss", c = "orange")
+            axs[0].plot(self.crit_losses, label="Critic Loss", c="blue")
+            axs[1].plot(self.gen_losses, label="Generator Loss", c="orange")
 
-            fig.suptitle(f"Wasserstein loss evolution until epoch: {engine.state.epoch}")
+            fig.suptitle(
+                f"Wasserstein loss evolution until epoch: {engine.state.epoch}"
+            )
 
             save_location = Path(ENV_CONFIG["FIGURES_FOLDER"])
-            
+
             fig.legend()
             fig.tight_layout()
 
-            fig.savefig(save_location / f"wgan_{self.wgan_type.value}_{engine.state.epoch}_{ENV_CONFIG['RUN_TIME']}" )
+            fig.savefig(
+                save_location
+                / f"wgan_{self.wgan_type.value}_{engine.state.epoch}_{ENV_CONFIG['RUN_TIME']}"
+            )
 
         @trainer.on(self.events)
         def run_validation(engine):
@@ -134,7 +141,9 @@ class WGANTrainerSetup(BaseTrainerSetup):
 
             metrics = evaluator.state.metrics
 
-            print(f"Epoch: {engine.state.epoch} | Avg Wasserstein Loss: {metrics['Wasserstein Loss']:.3f}")
+            print(
+                f"Epoch: {engine.state.epoch} | Avg Wasserstein Loss: {metrics['Wasserstein Loss']:.3f}"
+            )
 
         return trainer, evaluator
 
@@ -304,7 +313,6 @@ class WGANTrainerSetup(BaseTrainerSetup):
             noise = torch.randn((batch_size, self.latent_size))
 
         with torch.no_grad():
-            
             real = batch.float().cuda()
             noise = noise.float().cuda()
 
@@ -316,8 +324,8 @@ class WGANTrainerSetup(BaseTrainerSetup):
             w_loss = crit_fake.mean() - crit_real.mean()
 
         # engine.state.metrics = w_loss.item()
-        
-        return (w_loss,0)
+
+        return (w_loss, 0)
 
     def __compute_gradient_penalty(
         self,
@@ -336,7 +344,7 @@ class WGANTrainerSetup(BaseTrainerSetup):
 
         crit_interpolated = self.critic(interpolated)
 
-        fake  = Variable(torch.ones_like(crit_interpolated), requires_grad=False)
+        fake = Variable(torch.ones_like(crit_interpolated), requires_grad=False)
 
         # Get gradient w.r.t. interpolates
         gradients = autograd.grad(
@@ -363,14 +371,14 @@ class WGANTrainerSetup(BaseTrainerSetup):
 
         """
         self.c_optimizer = RMSprop(
-            params = self.critic.parameters(),
-            lr = hyperparameters.discriminator_learning_rate,
-            weight_decay = hyperparameters.l2_penalty,
+            params=self.critic.parameters(),
+            lr=hyperparameters.discriminator_learning_rate,
+            weight_decay=hyperparameters.l2_penalty,
         )
 
         self.g_optimizer = RMSprop(
-            params = self.generator.parameters(),
-            lr = hyperparameters.generator_learning_rate,
+            params=self.generator.parameters(),
+            lr=hyperparameters.generator_learning_rate,
             # weight_decay = hyperparameters.l2_penalty,
         )
 
@@ -383,15 +391,13 @@ class WGANTrainerSetup(BaseTrainerSetup):
             hyperparameters: Hyperparaters to use for the optimizers
         """
         self.c_optimizer = Adam(
-            params = self.critic.parameters(),
-            lr = hyperparameters.discriminator_learning_rate,
+            params=self.critic.parameters(),
+            lr=hyperparameters.discriminator_learning_rate,
             betas=hyperparameters.adam_betas,
-            # weight_decay = hyperparameters.l2_penalty,
         )
 
         self.g_optimizer = Adam(
-            params = self.generator.parameters(),
-            lr = hyperparameters.generator_learning_rate,
+            params=self.generator.parameters(),
+            lr=hyperparameters.generator_learning_rate,
             betas=hyperparameters.adam_betas,
-            # weight_decay = hyperparameters.l2_penalty,
         )

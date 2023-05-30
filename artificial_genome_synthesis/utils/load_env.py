@@ -16,6 +16,7 @@ RUN_TIME = int(time.time())
 print("Experiment nº ", end="")
 print(Fore.GREEN + f"{RUN_TIME}" + Fore.RESET)
 
+
 # Env file loading
 def load_env():
     env_file = find_dotenv(filename=".env", raise_error_if_not_found=True)
@@ -27,7 +28,7 @@ def load_env():
             "scikit_learn version": sklearn.__version__,
             "matplotlib version": mpl.__version__,
             "seaborn version": sns.__version__,
-            "RUN_TIME" : RUN_TIME,
+            "RUN_TIME": RUN_TIME,
         }
     )
 
