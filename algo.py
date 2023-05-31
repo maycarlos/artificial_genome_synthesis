@@ -39,13 +39,18 @@ class HyperParameters:
 
     # alpha value for LeakyReLU
     alpha: float = 0.01
-    save_interval : int = 5
-    adam_betas : tuple[float,float] = (0.5,0.9,)
-    clip_val : float = 0.01
-    lambda_gp : float = 20
-    n_critic : int = 5
+    save_interval: int = 5
+    adam_betas: tuple[float, float] = (
+        0.5,
+        0.9,
+    )
+    clip_val: float = 0.01
+    lambda_gp: float = 20
+    n_critic: int = 5
+
 
 HP = HyperParameters()
+
 
 def load_data():
     gwas_ssf = pd.read_csv(
@@ -70,8 +75,9 @@ def load_data():
         .pipe(lambda x: x - np.random.uniform(0, 0.1, size=x.shape))
         .astype(np.float16)
     )
-    
+
     return genotype, gwas_ssf
+
 
 def seed_all(seed):
     # Seed the random number generators
@@ -80,6 +86,7 @@ def seed_all(seed):
     g = torch.Generator()
     g.manual_seed(seed)
     return g
+
 
 def instanciate_models(dataloader):
     X, y = next(iter(dataloader))
@@ -91,12 +98,11 @@ def instanciate_models(dataloader):
     ).cuda()
 
     critic = WGAN_Critic(features=X.shape[1], alpha=HP.alpha).cuda()
-    
-    return  generator, critic
+
+    return generator, critic
 
 
-def attach_logger(trainer: Engine,evaluator:Engine, trainer_setup: WGANTrainerSetup):
-
+def attach_logger(trainer: Engine, evaluator: Engine, trainer_setup: WGANTrainerSetup):
     mlrun_path = load_env.ENV_CONFIG["MLRUNS_PATH"]
 
     mlflow_logger = MLflowLogger(mlrun_path)
@@ -130,12 +136,11 @@ def attach_logger(trainer: Engine,evaluator:Engine, trainer_setup: WGANTrainerSe
 
 
 def main():
-
     g = seed_all(HP.random_seed)
 
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {dev}")
-    
+
     genotype, gwas_ssf = load_data()
     latent_size = gwas_ssf.shape[1]
 
@@ -147,30 +152,22 @@ def main():
         generator=g,
     )
 
-    train_genotype = (
-        Genotype
-        .fromSubset(train_subset)
-        .make_dataloader(
-            batch_size=32,
-            num_workers=0,
-            generator=g,
-            shuffle=True,
-            drop_last=True,
-            pin_memory=True,
-        )
+    train_genotype = Genotype.fromSubset(train_subset).make_dataloader(
+        batch_size=32,
+        num_workers=0,
+        generator=g,
+        shuffle=True,
+        drop_last=True,
+        pin_memory=True,
     )
 
-    val_genotype = (
-        Genotype
-        .fromSubset(val_subset)
-        .make_dataloader(
-            batch_size=32,
-            num_workers=0,
-            generator=g,
-            shuffle=False,
-            drop_last=True,
-            pin_memory=True,
-        )
+    val_genotype = Genotype.fromSubset(val_subset).make_dataloader(
+        batch_size=32,
+        num_workers=0,
+        generator=g,
+        shuffle=False,
+        drop_last=True,
+        pin_memory=True,
     )
 
     generator, critic = instanciate_models(train_genotype)
@@ -191,7 +188,7 @@ def main():
         latent_size=latent_size,
         save_interval=HP.save_interval,
         n_critic=HP.n_critic,
-        lambda_gp=HP.lambda_gp
+        lambda_gp=HP.lambda_gp,
     )
 
     trainer, evaluator = wgan_trainer_setup.trainer_setup()
@@ -203,6 +200,7 @@ def main():
 
     torch.save(generator, model_path / "generator.pt")
     torch.save(critic, model_path / "critic.pt")
+
 
 if __name__ == "__main__":
     main()
