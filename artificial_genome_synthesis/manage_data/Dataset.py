@@ -2,7 +2,7 @@ from typing import Optional
 
 from torch.utils.data import DataLoader, Subset
 
-from ..base import BaseGenotype
+from ..base_classes import BaseGenotype
 from ..utils.types_ import Array, DataFrame, Tensor
 from sklearn.base import check_X_y, check_array
 

@@ -1,5 +1,5 @@
 from typing import Tuple
-from ...base import BaseModel
+from ...base_classes import BaseModel
 
 import torch
 import torch.nn as nn

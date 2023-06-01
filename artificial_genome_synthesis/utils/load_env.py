@@ -1,10 +1,12 @@
 import time
 
+import ignite
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import sklearn
+import torch
 from colorama import Fore, init
 from dotenv import dotenv_values, find_dotenv
 
@@ -12,9 +14,6 @@ init(autoreset=True)
 
 
 RUN_TIME = int(time.time())
-
-print("Experiment nº ", end="")
-print(Fore.GREEN + f"{RUN_TIME}" + Fore.RESET)
 
 
 # Env file loading
@@ -28,6 +27,8 @@ def load_env():
             "scikit_learn version": sklearn.__version__,
             "matplotlib version": mpl.__version__,
             "seaborn version": sns.__version__,
+            "torch version": torch.__version__,
+            "ignite version": ignite.__version__,
             "RUN_TIME": RUN_TIME,
         }
     )

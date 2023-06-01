@@ -6,7 +6,6 @@ set up training of WGAN three different ways:
 """
 from enum import Enum
 from pathlib import Path
-from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,7 +18,7 @@ from ignite.handlers import EarlyStopping
 from torch.autograd import Variable
 from torch.optim import Adam, RMSprop
 
-from ...base import BaseTrainerSetup
+from ...base_classes import BaseTrainerSetup
 from ...utils.load_env import ENV_CONFIG
 from ...utils.types_ import DataLoader, Model, Tensor
 from .metrics import Average
@@ -33,13 +32,11 @@ class WGANTrainerSetup(BaseTrainerSetup):
         generator: Model,
         critic: Model,
         wgan_type: Enum,
-        hyperparameters: object,
+        hyperparameters,
         val_dataloader: DataLoader,
         latent_size: int,
         save_interval: int,
         n_critic: int = 5,
-        clip_val: Optional[float] = None,
-        lambda_gp: Optional[float] = None,
     ):
         self.generator = generator
         self.critic = critic
@@ -48,14 +45,13 @@ class WGANTrainerSetup(BaseTrainerSetup):
         self.save_interval = save_interval
         self.__latent_size = latent_size
         self.__n_critic = n_critic
-        self.__clip_val = clip_val
 
         if self.wgan_type.value == "CP":
             self.__init_optimizer_cp(hyperparameters)
-            self.__clip_val = clip_val
+            self.__clip_val = hyperparameters.clip_val
         elif self.wgan_type.value == "GP":
             self.__init_optimizer_gp(hyperparameters)
-            self.__lambda_gp = lambda_gp
+            self.__lambda_gp = hyperparameters.lambda_gp
 
         self.gen_losses: list = []
         self.crit_losses: list = []
@@ -111,6 +107,9 @@ class WGANTrainerSetup(BaseTrainerSetup):
 
         @trainer.on(Events.STARTED)
         def start_message():
+            print("Experiment nº ", end="")
+            print(Fore.GREEN + f"{ENV_CONFIG['RUN_TIME']}" + Fore.RESET)
+
             print(Fore.GREEN + "Begin training!" + Fore.RESET)
 
         @trainer.on(self.events)
@@ -372,13 +371,13 @@ class WGANTrainerSetup(BaseTrainerSetup):
         """
         self.c_optimizer = RMSprop(
             params=self.critic.parameters(),
-            lr=hyperparameters.discriminator_learning_rate,
-            weight_decay=hyperparameters.l2_penalty,
+            lr=hyperparameters.discriminator_lr,
+            weight_decay=hyperparameters.l2_pen,
         )
 
         self.g_optimizer = RMSprop(
             params=self.generator.parameters(),
-            lr=hyperparameters.generator_learning_rate,
+            lr=hyperparameters.generator_lr,
             # weight_decay = hyperparameters.l2_penalty,
         )
 
@@ -392,12 +391,12 @@ class WGANTrainerSetup(BaseTrainerSetup):
         """
         self.c_optimizer = Adam(
             params=self.critic.parameters(),
-            lr=hyperparameters.discriminator_learning_rate,
-            betas=hyperparameters.adam_betas,
+            lr=hyperparameters.discriminator_lr,
+            betas=(hyperparameters.beta1, hyperparameters.beta2),
         )
 
         self.g_optimizer = Adam(
             params=self.generator.parameters(),
-            lr=hyperparameters.generator_learning_rate,
-            betas=hyperparameters.adam_betas,
+            lr=hyperparameters.generator_lr,
+            betas=(hyperparameters.beta1, hyperparameters.beta2),
         )
