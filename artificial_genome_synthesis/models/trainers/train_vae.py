@@ -7,7 +7,7 @@ from ignite.metrics import Loss
 
 from artificial_genome_synthesis.utils.types_ import Device
 
-from ...base.BaseTrainSetup import BaseTrainerSetup
+from ...base_classes.BaseTrainSetup import BaseTrainerSetup
 from ...utils.types_ import (
     DataFrame,
     Dataloader,

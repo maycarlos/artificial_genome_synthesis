@@ -5,7 +5,7 @@ from ignite.engine import Engine, Events
 from torch.nn.utils import clip_grad_norm_
 from umap import UMAP
 
-from ...base import BaseTrainerSetup
+from ...base_classes import BaseTrainerSetup
 from ...utils.types_ import (
     DataFrame,
     Dataloader,

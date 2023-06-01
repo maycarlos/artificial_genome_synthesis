@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any, Callable, TypeVar
 
 import numpy as np
@@ -5,14 +6,11 @@ import pandas as pd
 import torch
 from torch.types import Device
 from torch.utils.data import DataLoader
-from enum import Enum
 
 
 class SelectWGAN(Enum):
     GP = "GP"
     CP = "CP"
-    NAIVE = "NAIVE"
-    CUSTOM = "CUSTOM"
 
 
 DataFrame = TypeVar("DataFrame", pd.DataFrame, Any)
