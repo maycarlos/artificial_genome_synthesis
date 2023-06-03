@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-import torch.nn as nn
+from torch import nn
 
 
 class BaseModel(nn.Module, metaclass=ABCMeta):
@@ -8,5 +8,5 @@ class BaseModel(nn.Module, metaclass=ABCMeta):
         super().__init__(*args, **kwargs)
 
     @abstractmethod
-    def forward(X):
+    def forward(self, X):
         pass

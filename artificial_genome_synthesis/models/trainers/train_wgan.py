@@ -6,15 +6,16 @@ set up training of WGAN three different ways:
 """
 from enum import Enum
 from pathlib import Path
+from typing import Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-import torch.autograd as autograd
 from colorama import Fore, init
 from ignite.contrib.handlers import ProgressBar
 from ignite.engine import Engine, Events
 from ignite.handlers import EarlyStopping
+from torch import autograd
 from torch.autograd import Variable
 from torch.optim import Adam, RMSprop
 
@@ -42,7 +43,6 @@ class WGANTrainerSetup(BaseTrainerSetup):
         self.critic = critic
         self.wgan_type = wgan_type
         self.val_dataloader = val_dataloader
-        self.save_interval = save_interval
         self.__latent_size = latent_size
         self.__n_critic = n_critic
 
@@ -57,15 +57,12 @@ class WGANTrainerSetup(BaseTrainerSetup):
         self.crit_losses: list = []
 
         self.events = Events.EPOCH_COMPLETED(once=1) | Events.EPOCH_COMPLETED(
-            every=self.save_interval
+            every=save_interval
         )
 
-    def trainer_setup(self) -> tuple[Engine, Engine]:
-        if self.wgan_type.value == "CP":
-            trainer = Engine(self.__train_step_cp)
-        elif self.wgan_type.value == "GP":
-            trainer = Engine(self.__train_step_gp)
+    def trainer_setup(self) -> Tuple[Engine, Engine]:
 
+        trainer = Engine(self.__train_step)
         evaluator = Engine(self.__validation_step)
 
         def score_function(engine):
@@ -138,21 +135,21 @@ class WGANTrainerSetup(BaseTrainerSetup):
             print(Fore.GREEN + "Validation!" + Fore.RESET)
             evaluator.run(self.val_dataloader)
 
-            metrics = evaluator.state.metrics
+            w_loss = evaluator.state.metrics["Wasserstein Loss"]
 
-            print(
-                f"Epoch: {engine.state.epoch} | Avg Wasserstein Loss: {metrics['Wasserstein Loss']:.3f}"
-            )
+            state = f"Epoch: {engine.state.epoch} | Avg Wasserstein Loss: {w_loss:.3f}"
+            print(state)
 
         return trainer, evaluator
 
-    def __train_step_cp(self, engine, batch):
+    def __train_step(self, engine, batch):
         """Train step from a WGAN with gradient clipping"""
+
         self.generator.train()
         self.critic.train()
 
-        for p in self.critic.parameters():
-            p.requires_grad = True
+        for param in self.critic.parameters():
+            param.requires_grad = True
 
         one = torch.tensor(1, dtype=torch.float).cuda()
         m_one = (one * -1).cuda()
@@ -177,109 +174,44 @@ class WGANTrainerSetup(BaseTrainerSetup):
 
             noise = noise.float().cuda()
 
-            X_real = batch.float().cuda()
-            X_fake = self.generator(noise)
+            real = batch.float().cuda()
+            fake = self.generator(noise)
 
-            crit_real = self.critic(X_real)
-            crit_fake = self.critic(X_fake)
+            crit_real = self.critic(real)
+            crit_fake = self.critic(fake)
 
             crit_loss = crit_fake.mean() - crit_real.mean()
 
-            crit_loss.backward()
-            self.c_optimizer.step()
+            if self.wgan_type.value == "GP":
+                grad_penalty = self.__compute_gradient_penalty(
+                    real_samples=real,
+                    fake_samples=fake,
+                    lambda_gp=self.__lambda_gp,
+                )
 
-            # Clip weights
-            for p in self.critic.parameters():
-                p.data.clamp_(-self.__clip_val, self.__clip_val)
-
-            crit_loss_mean.append(crit_loss.item())
-
-        losses_dict["Critic Loss"] = np.mean(crit_loss_mean)
-
-        # * Train generator
-        for p in self.critic.parameters():
-            p.requires_grad = False
-
-        self.g_optimizer.zero_grad()
-
-        X_fake = self.generator(noise)
-
-        crit_fake = self.critic(X_fake)
-
-        gen_loss = crit_fake.mean()
-
-        gen_loss.backward(m_one)
-        self.g_optimizer.step()
-
-        losses_dict["Generator Loss"] = gen_loss.item()
-
-        self.gen_losses.append(losses_dict["Generator Loss"])
-        self.crit_losses.append(losses_dict["Critic Loss"])
-
-        engine.state.metrics = losses_dict
-
-        return losses_dict
-
-    def __train_step_gp(self, engine, batch):
-        """Train step for a WGAN with gradient_penalty"""
-        self.generator.train()
-        self.critic.train()
-
-        for p in self.critic.parameters():
-            p.requires_grad = True
-
-        one = torch.tensor(1, dtype=torch.float).cuda()
-        m_one = (one * -1).cuda()
-
-        noise = None
-        if len(batch) == 2:
-            noise = batch[1]
-            batch = batch[0]
-
-        batch_size = len(batch)
-
-        losses_dict = {"Critic Loss": 0, "Generator Loss": 0}
-
-        # * Train Critic
-        for _ in range(self.__n_critic):
-            crit_loss_mean = []
-            self.c_optimizer.zero_grad()
-
-            if noise is None:
-                noise = torch.rand((batch_size, self.latent_size))
-
-            noise = noise.float().cuda()
-
-            X_real = batch.float().cuda()
-            X_fake = self.generator(noise)
-
-            crit_real = self.critic(X_real)
-            crit_fake = self.critic(X_fake)
-
-            grad_penalty = self.__compute_gradient_penalty(
-                real_samples=X_real,
-                fake_samples=X_fake,
-                lambda_gp=self.__lambda_gp,
-            )
-
-            crit_loss = crit_fake.mean() - crit_real.mean() + grad_penalty
+                crit_loss += grad_penalty
 
             crit_loss.backward()
             self.c_optimizer.step()
+
+            if self.wgan_type.value == "CP":
+                # Clip weights
+                for param in self.critic.parameters():
+                    param.data.clamp_(-self.__clip_val, self.__clip_val)
 
             crit_loss_mean.append(crit_loss.item())
 
         losses_dict["Critic Loss"] = np.mean(crit_loss_mean)
 
         # * Train Generator
-        for p in self.critic.parameters():
-            p.requires_grad = False
+        for param in self.critic.parameters():
+            param.requires_grad = False
 
         self.g_optimizer.zero_grad()
 
-        X_fake = self.generator(noise)
+        fake = self.generator(noise)
 
-        crit_fake = self.critic(X_fake)
+        crit_fake = self.critic(fake)
 
         gen_loss = crit_fake.mean()
 
@@ -309,7 +241,7 @@ class WGANTrainerSetup(BaseTrainerSetup):
         batch_size = len(batch)
 
         if noise is None:
-            noise = torch.randn((batch_size, self.latent_size))
+            noise = torch.randn((batch_size, self.__latent_size))
 
         with torch.no_grad():
             real = batch.float().cuda()
@@ -343,7 +275,10 @@ class WGANTrainerSetup(BaseTrainerSetup):
 
         crit_interpolated = self.critic(interpolated)
 
-        fake = Variable(torch.ones_like(crit_interpolated), requires_grad=False)
+        fake = Variable(
+            torch.ones_like(crit_interpolated),
+            requires_grad=False,
+        )
 
         # Get gradient w.r.t. interpolates
         gradients = autograd.grad(
@@ -356,7 +291,9 @@ class WGANTrainerSetup(BaseTrainerSetup):
         )[0]
 
         gradients = gradients.view(gradients.size(0), -1)
-        gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * lambda_gp
+        gradient_penalty = (
+            (gradients.norm(2, dim=1) - 1) ** 2
+        ).mean() * lambda_gp
 
         return gradient_penalty
 

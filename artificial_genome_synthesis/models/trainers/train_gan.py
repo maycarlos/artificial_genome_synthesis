@@ -1,3 +1,7 @@
+"""
+Setup class for training GANs with the ignite module
+"""
+
 import torch
 from colorama import Fore, init
 from ignite.contrib.handlers import ProgressBar

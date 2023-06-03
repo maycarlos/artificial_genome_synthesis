@@ -1,6 +1,6 @@
 import time
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,11 +8,11 @@ import pandas as pd
 import torch
 from colorama import Fore, init
 from sklearn.decomposition import PCA
+from sklearn.utils.validation import check_is_fitted
 from umap import UMAP
 
 from ..utils.load_env import ENV_CONFIG
-from ..utils.types_ import DataFrame, Device, Model, Array, Tensor
-from sklearn.utils.validation import check_is_fitted
+from ..utils.types_ import Array, DataFrame, Device, Model, Tensor
 
 init(autoreset=True)
 
@@ -180,15 +180,16 @@ def plot_pca(
 
 
 def plot_losses(
-    discriminator_losses: list[float],
-    generator_losses: list[float],
+    discriminator_losses: List[float],
+    generator_losses: List[float],
     epoch: int,
     save_fig: bool = True,
     save_location: Path = default_figure_folder,
 ):
     fig, ax = plt.subplots(1, 2)
 
-    ax[0].plot(discriminator_losses, linewidth=2, c="orange", label="Discriminator")
+    ax[0].plot(discriminator_losses, linewidth=2,
+               c="orange", label="Discriminator")
 
     ax[0].set_title("Discriminator Loss Evolution")
 
