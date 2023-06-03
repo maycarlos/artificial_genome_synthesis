@@ -1,6 +1,7 @@
-from ignite.metrics import Metric
-import torch
 from typing import Callable, Union
+
+import torch
+from ignite.metrics import Metric
 
 
 class Average(Metric):

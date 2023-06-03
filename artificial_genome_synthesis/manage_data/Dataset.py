@@ -1,10 +1,9 @@
-from typing import Optional
+from typing import Optional, Tuple
 
 from torch.utils.data import DataLoader, Subset
 
 from ..base_classes import BaseGenotype
 from ..utils.types_ import Array, DataFrame, Tensor
-from sklearn.base import check_X_y, check_array
 
 Labels = Array | Tensor
 
@@ -18,7 +17,7 @@ class Genotype(BaseGenotype):
         self.data = data
         self.labels = labels
 
-    def __getitem__(self, index: int) -> tuple[Tensor, Tensor]:
+    def __getitem__(self, index: int) -> Tuple[Tensor, Tensor]:
         if self.labels is None:
             return self.data[index]
         return self.data[index], self.labels[index]
