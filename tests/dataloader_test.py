@@ -1,21 +1,21 @@
 import unittest
+
+import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 
 # Import your project modules
 from artificial_genome_synthesis.manage_data import Genotype
+from artificial_genome_synthesis.utils import config
 
 # from myproject.data import DataLoader
 # from myproject.model import MyModel
-
-from artificial_genome_synthesis.utils import ENV_CONFIG
-import pandas as pd
 
 
 class TestDataLoader(unittest.TestCase):
     def test_data_shape(self):
         # Test that the input data is the expected shape
-        df = pd.read_csv(ENV_CONFIG["CONTROL_INPUT_DATA"], sep="\t")
+        df = pd.read_csv(config["CONTROL_INPUT_DATA"], sep="\t")
 
         self.assertEqual(df.shape[1], 1)
         # control_genotype  = Genotype(df)
