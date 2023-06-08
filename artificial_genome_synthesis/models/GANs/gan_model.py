@@ -8,8 +8,7 @@ class Generator(nn.Module):
         super().__init__()
 
         self.generate = nn.Sequential(
-            nn.Linear(in_features=latent_size,
-                      out_features=int(features // 1.2)),
+            nn.Linear(in_features=latent_size, out_features=int(features // 1.2)),
             nn.LeakyReLU(negative_slope=alpha, inplace=True),
             # nn.GELU(),
             nn.Linear(

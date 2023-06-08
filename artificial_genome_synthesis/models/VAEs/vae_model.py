@@ -14,23 +14,18 @@ class VariationalAutoEncoder(BaseModel):
         self.encoder = nn.Sequential(
             nn.Linear(in_features=features, out_features=int(features // 2)),
             nn.LeakyReLU(negative_slope=alpha),
-            nn.Linear(in_features=int(features // 2),
-                      out_features=int(features // 3)),
+            nn.Linear(in_features=int(features // 2), out_features=int(features // 3)),
             nn.LeakyReLU(negative_slope=alpha),
-            nn.Linear(in_features=int(features // 3),
-                      out_features=latent_size),
+            nn.Linear(in_features=int(features // 3), out_features=latent_size),
         )
 
         self.miu = nn.Linear(in_features=latent_size, out_features=latent_size)
-        self.sigma = nn.Linear(in_features=latent_size,
-                               out_features=latent_size)
+        self.sigma = nn.Linear(in_features=latent_size, out_features=latent_size)
 
         self.decoder = nn.Sequential(
-            nn.Linear(in_features=latent_size,
-                      out_features=int(features // 3)),
+            nn.Linear(in_features=latent_size, out_features=int(features // 3)),
             nn.LeakyReLU(negative_slope=alpha),
-            nn.Linear(in_features=int(features // 3),
-                      out_features=int(features // 2)),
+            nn.Linear(in_features=int(features // 3), out_features=int(features // 2)),
             nn.LeakyReLU(negative_slope=alpha),
             nn.Linear(in_features=int(features // 3), out_features=features),
         )

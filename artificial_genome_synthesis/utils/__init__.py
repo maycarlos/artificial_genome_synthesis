@@ -1,2 +1,2 @@
-from .load_env import ENV_CONFIG
+from .load_env import config
 from .types_ import *

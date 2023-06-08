@@ -7,11 +7,7 @@ import pandas as pd
 import seaborn as sns
 import sklearn
 import torch
-from colorama import Fore, init
 from dotenv import dotenv_values, find_dotenv
-
-init(autoreset=True)
-
 
 RUN_TIME = int(time.time())
 
@@ -36,6 +32,6 @@ def load_env():
     return config
 
 
-ENV_CONFIG = load_env()
+config = load_env()
 
-__all__ = ["ENV_CONFIG"]
+__all__ = ["config"]

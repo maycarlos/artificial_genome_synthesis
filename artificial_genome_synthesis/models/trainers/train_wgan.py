@@ -4,7 +4,6 @@ set up training of WGAN three different ways:
     Wasserstein GAN with gradient clipping - WGAN-CP
     Wasserstein GAN with gradient penalty - WGAN-GP
 """
-from enum import Enum
 from pathlib import Path
 from typing import Tuple
 
@@ -20,8 +19,8 @@ from torch.autograd import Variable
 from torch.optim import Adam, RMSprop
 
 from ...base_classes import BaseTrainerSetup
-from ...utils.load_env import ENV_CONFIG
-from ...utils.types_ import DataLoader, Model, Tensor
+from ...utils.load_env import config
+from ...utils.types_ import WGAN, DataLoader, Model, Tensor
 from .metrics import Average
 
 init(autoreset=True)
@@ -32,36 +31,31 @@ class WGANTrainerSetup(BaseTrainerSetup):
         self,
         generator: Model,
         critic: Model,
-        wgan_type: Enum,
-        hyperparameters,
+        parameters,
         val_dataloader: DataLoader,
-        latent_size: int,
-        save_interval: int,
-        n_critic: int = 5,
     ):
         self.generator = generator
         self.critic = critic
-        self.wgan_type = wgan_type
         self.val_dataloader = val_dataloader
-        self.__latent_size = latent_size
-        self.__n_critic = n_critic
+        self.wgan_type = parameters.wgan_type
+        self.__latent_size = parameters.latent_size
+        self.__n_critic = parameters.n_critic
 
-        if self.wgan_type.value == "CP":
-            self.__init_optimizer_cp(hyperparameters)
-            self.__clip_val = hyperparameters.clip_val
-        elif self.wgan_type.value == "GP":
-            self.__init_optimizer_gp(hyperparameters)
-            self.__lambda_gp = hyperparameters.lambda_gp
+        if self.wgan_type == WGAN.CP:
+            self.__init_optimizer_cp(parameters)
+            self.__clip_val = parameters.clip_val
+        elif self.wgan_type == WGAN.GP:
+            self.__init_optimizer_gp(parameters)
+            self.__lambda_gp = parameters.lambda_gp
 
         self.gen_losses: list = []
         self.crit_losses: list = []
 
         self.events = Events.EPOCH_COMPLETED(once=1) | Events.EPOCH_COMPLETED(
-            every=save_interval
+            every=parameters.save_interval
         )
 
     def trainer_setup(self) -> Tuple[Engine, Engine]:
-
         trainer = Engine(self.__train_step)
         evaluator = Engine(self.__validation_step)
 
@@ -105,8 +99,7 @@ class WGANTrainerSetup(BaseTrainerSetup):
         @trainer.on(Events.STARTED)
         def start_message():
             print("Experiment nº ", end="")
-            print(Fore.GREEN + f"{ENV_CONFIG['RUN_TIME']}" + Fore.RESET)
-
+            print(Fore.GREEN + f"{config['RUN_TIME']}" + Fore.RESET)
             print(Fore.GREEN + "Begin training!" + Fore.RESET)
 
         @trainer.on(self.events)
@@ -120,14 +113,14 @@ class WGANTrainerSetup(BaseTrainerSetup):
                 f"Wasserstein loss evolution until epoch: {engine.state.epoch}"
             )
 
-            save_location = Path(ENV_CONFIG["FIGURES_FOLDER"])
+            save_location = Path(config["FIGURES_FOLDER"])
 
             fig.legend()
             fig.tight_layout()
 
             fig.savefig(
                 save_location
-                / f"wgan_{self.wgan_type.value}_{engine.state.epoch}_{ENV_CONFIG['RUN_TIME']}"
+                / f"wgan_{self.wgan_type.value}_{engine.state.epoch}_{config['RUN_TIME']}"
             )
 
         @trainer.on(self.events)
@@ -182,7 +175,7 @@ class WGANTrainerSetup(BaseTrainerSetup):
 
             crit_loss = crit_fake.mean() - crit_real.mean()
 
-            if self.wgan_type.value == "GP":
+            if self.wgan_type == WGAN.GP:
                 grad_penalty = self.__compute_gradient_penalty(
                     real_samples=real,
                     fake_samples=fake,
@@ -194,7 +187,7 @@ class WGANTrainerSetup(BaseTrainerSetup):
             crit_loss.backward()
             self.c_optimizer.step()
 
-            if self.wgan_type.value == "CP":
+            if self.wgan_type == WGAN.CP:
                 # Clip weights
                 for param in self.critic.parameters():
                     param.data.clamp_(-self.__clip_val, self.__clip_val)
@@ -291,9 +284,7 @@ class WGANTrainerSetup(BaseTrainerSetup):
         )[0]
 
         gradients = gradients.view(gradients.size(0), -1)
-        gradient_penalty = (
-            (gradients.norm(2, dim=1) - 1) ** 2
-        ).mean() * lambda_gp
+        gradient_penalty = ((gradients.norm(2, dim=1) - 1) ** 2).mean() * lambda_gp
 
         return gradient_penalty
 

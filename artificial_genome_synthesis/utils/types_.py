@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 from typing import Any, Callable, TypeVar
 
 import numpy as np
@@ -8,9 +8,9 @@ from torch.types import Device
 from torch.utils.data import DataLoader
 
 
-class SelectWGAN(Enum):
-    GP = "GP"
-    CP = "CP"
+class WGAN(Enum):
+    GP = auto()
+    CP = auto()
 
 
 DataFrame = TypeVar("DataFrame", pd.DataFrame, Any)
@@ -22,7 +22,7 @@ Optimizer = TypeVar("Optimizer", torch.optim.Optimizer, Any)
 LossFunction = TypeVar("LossFunction", Callable, Any)
 
 __all__ = [
-    "SelectWGAN",
+    "WGAN",
     "DataFrame",
     "Tensor",
     "Array",

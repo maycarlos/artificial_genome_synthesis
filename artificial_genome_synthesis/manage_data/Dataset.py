@@ -38,6 +38,7 @@ class Genotype(BaseGenotype):
             dataset=self,
             batch_size=batch_size,
             num_workers=num_workers,
+            persistent_workers=True,
             generator=generator,
             shuffle=shuffle,
             drop_last=drop_last,

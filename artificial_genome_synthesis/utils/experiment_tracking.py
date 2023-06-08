@@ -6,14 +6,15 @@ from ignite.contrib.handlers import MLflowLogger
 from ignite.engine import Engine, Events
 
 from ..models.trainers import WGANTrainerSetup
-from . import load_env
+from .load_env import config
 
 
-def seed_all(seed):
+def seed_all(seed: int) -> torch.Generator:
     """_summary_
 
-    Args:
-        seed (_type_): _description_
+    Args
+    ---
+        seed (int): _description_
 
     Returns
     ---
@@ -28,12 +29,24 @@ def seed_all(seed):
 
 
 def attach_logger(
-    trainer: Engine, evaluator: Engine, trainer_setup: WGANTrainerSetup, hyperparameters
+    trainer: Engine,
+    evaluator: Engine,
+    trainer_setup: WGANTrainerSetup,
+    h_param,
 ):
-    mlrun_path = load_env.ENV_CONFIG["MLRUNS_PATH"]
+    """
+
+    Args:
+        trainer (Engine): _description_
+        evaluator (Engine): _description_
+        trainer_setup (WGANTrainerSetup): _description_
+        hyperparameters (_type_): _description_
+    """
+
+    mlrun_path = config["MLRUNS_PATH"]
 
     versions = {}
-    for k, v in load_env.ENV_CONFIG.items():
+    for k, v in config.items():
         if re.match(r"version$", k):
             versions[k] = v
 
@@ -42,10 +55,12 @@ def attach_logger(
         {
             "Generator": trainer_setup.generator,
             "Critic": trainer_setup.critic,
-            "Seed": hyperparameters.random_seed,
-            "Batch Size": hyperparameters.batch_size,
-            "Discriminator Learning Rate": hyperparameters.discriminator_lr,
-            "Generator Learning Rate": hyperparameters.generator_lr,
+            "Seed": h_param.random_seed,
+            "Batch Size": h_param.batch_size,
+            "Discriminator Learning Rate": h_param.discriminator_lr,
+            "Generator Learning Rate": h_param.generator_lr,
+            "Lambda Gradient Penalty": h_param.lambda_gp,
+            "Clipping interval": h_param.clip_val,
             **versions,
         }
     )

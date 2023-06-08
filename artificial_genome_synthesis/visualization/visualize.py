@@ -1,4 +1,3 @@
-import time
 from pathlib import Path
 from typing import List, Optional
 
@@ -8,22 +7,22 @@ import pandas as pd
 import torch
 from colorama import Fore, init
 from sklearn.decomposition import PCA
-from sklearn.utils.validation import check_is_fitted
 from umap import UMAP
 
-from ..utils.load_env import ENV_CONFIG
+from ..utils.load_env import config
 from ..utils.types_ import Array, DataFrame, Device, Model, Tensor
 
 init(autoreset=True)
 
-RUN_TIME = ENV_CONFIG["RUN_TIME"]
+RUN_TIME = config["RUN_TIME"]
+
 plt.rcParams["figure.figsize"] = (12, 10)
 plt.style.use("fivethirtyeight")
 plt.switch_backend("agg")
 
 
-default_figure_folder = Path(ENV_CONFIG["FIGURES_FOLDER"])
-default_gendata_folder = Path(ENV_CONFIG["GENERATED_DATA_FOLDER"])
+default_figure_folder = Path(config["FIGURES_FOLDER"])
+default_gendata_folder = Path(config["GENERATED_DATA_FOLDER"])
 
 
 def create_artificial(
@@ -188,8 +187,7 @@ def plot_losses(
 ):
     fig, ax = plt.subplots(1, 2)
 
-    ax[0].plot(discriminator_losses, linewidth=2,
-               c="orange", label="Discriminator")
+    ax[0].plot(discriminator_losses, linewidth=2, c="orange", label="Discriminator")
 
     ax[0].set_title("Discriminator Loss Evolution")
 
