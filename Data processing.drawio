@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-09-27T14:56:19.882Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0" etag="VkdNVb9nVLU2S5U4T5sS" version="21.8.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-27T16:07:04.716Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0" etag="HxVEld61mVF7nOODi8Zd" version="21.8.2" type="github">
   <diagram name="Page-1" id="M9egRGRCFl2_E4pEztr0">
     <mxGraphModel dx="1690" dy="503" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -10,7 +10,7 @@
         <mxCell id="3" value="Geno-pheno&lt;br&gt;association" style="rhombus;strokeWidth=2;whiteSpace=wrap;fillColor=#e1d5e7;strokeColor=#9673a6;html=1;rounded=0;shadow=0;fillStyle=auto;" parent="1" vertex="1">
           <mxGeometry x="200" y="23.07" width="115.87" height="115.87" as="geometry" />
         </mxCell>
-        <mxCell id="5" value="" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.4944872342623197;" parent="1" target="3" edge="1">
+        <mxCell id="5" value="" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.4944872342623197;strokeWidth=2;" parent="1" target="3" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points" />
             <mxPoint x="113.53999999999999" y="80.50167022705072" as="sourcePoint" />
